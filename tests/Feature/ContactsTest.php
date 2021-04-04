@@ -6,9 +6,13 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Faker\Generator as Faker;
 use Tests\TestCase;
 use App\Models\Contacts;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use App\Models\User;
+
 
 class ContactsTest extends TestCase
 {
+    public $token;
     protected $fakerId;
     protected $fakerName;
     protected $fakerEmail;
@@ -27,7 +31,12 @@ class ContactsTest extends TestCase
      */
     public function test_get_contacts()
     {
-        $response = $this->get('/api/contacts');
+        $user = User::where('email', "all@test-poc.com")->first();
+        $token = JWTAuth::fromUser($user);
+
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->get('/api/contacts');
         $response
             ->assertStatus(200)
             ->assertJson([
@@ -42,7 +51,12 @@ class ContactsTest extends TestCase
      */
     public function test_error_contacts()
     {
-        $response = $this->get('/api/contact');
+        $user = User::where('email', "all@test-poc.com")->first();
+        $token = JWTAuth::fromUser($user);
+
+        $response = $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->get('/api/contact');
         $response
             ->assertStatus(404);
     }
@@ -54,9 +68,14 @@ class ContactsTest extends TestCase
      */
     public function test_insert_contacts()
     {
+        $user = User::where('email', "all@test-poc.com")->first();
+        $token = JWTAuth::fromUser($user);
+
         $totalContacts = Contacts::count();
 
-        $response = $this->post('/api/contacts', ["name" => $this->fakerName, "email" => $this->fakerEmail]);
+        $response = $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->post('/api/contacts', ["name" => $this->fakerName, "email" => $this->fakerEmail]);
         $response->assertStatus(201);
         $this->assertTrue($totalContacts + 1 == Contacts::count());
 
@@ -72,13 +91,18 @@ class ContactsTest extends TestCase
      */
     public function test_edit_contacts()
     {
+        $user = User::where('email', "all@test-poc.com")->first();
+        $token = JWTAuth::fromUser($user);
+
         $lastRecord = Contacts::latest("id")->first()['id'];
         $totalContacts = Contacts::count();
 
         $name = $this->fakerName . "editable";
         $email = "editable" . $this->fakerEmail;
 
-        $response = $this->put('/api/contacts/' . $lastRecord, ["name" => $name, "email" => $email]);
+        $response = $response = $this->withHeaders([
+                'Authorization' => 'Bearer ' . $token,
+            ])->put('/api/contacts/' . $lastRecord, ["name" => $name, "email" => $email]);
         $response->assertStatus(200);
         $this->assertTrue($response['data']['name'] == $name);
         $this->assertTrue($response['data']['email'] == $email);
@@ -92,10 +116,15 @@ class ContactsTest extends TestCase
      */
     public function test_remove_contacts()
     {
+        $user = User::where('email', "all@test-poc.com")->first();
+        $token = JWTAuth::fromUser($user);
+
         $lastRecord = Contacts::latest("id")->first()['id'];
         $totalContacts = Contacts::count();
 
-        $response = $this->delete('/api/contacts/' . $lastRecord);
+        $response = $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->delete('/api/contacts/' . $lastRecord);
         $response->assertStatus(200);
         $this->assertTrue($totalContacts - 1 == Contacts::count());
     }
