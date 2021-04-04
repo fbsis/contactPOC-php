@@ -26,6 +26,6 @@ class UserController extends Controller
             'message' => 'Login Successfully',
             'success' => true,
             'data' => $token
-        ], 401);
+        ], 200);
     }
 }
