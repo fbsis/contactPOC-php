@@ -37,6 +37,10 @@ class RoleAuthorization
             return $this->unauthorized('Please, attach a Bearer Token to your request');
         }
         //If user was authenticated successfully and user is in one of the acceptable roles, send to next request.
+        if (isset($roles[0])) {
+            $roles = explode("-", $roles[0]);
+        }
+
         if ($user && count(array_intersect(explode("-", $user->role), $roles)) > 0) {
             return $next($request);
         }
