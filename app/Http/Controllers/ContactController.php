@@ -8,6 +8,13 @@ use Illuminate\Support\Facades\Validator;
 
 class ContactController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth.role:read', ['only' => ['index', 'show']]);
+        $this->middleware('auth.role:read-add', ['only' => ['index', 'store', 'show']]);
+        $this->middleware('auth.role:read-add-delete', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
+    }
+
     private $validatorParams = [
         'name' => 'required|max:255',
         'email' => 'email',
