@@ -18,7 +18,9 @@ class UserFactory extends Factory
     /**
      * Define the model's default state.
      *
-     * @return array
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     *      
      */
     public function definition()
     {

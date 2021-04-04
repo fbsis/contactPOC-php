@@ -7,7 +7,11 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserController extends Controller
 {
-    //
+    /**
+     * login of user controller
+     *
+     * @return json Token
+     */
     public function login(Request $request)
     {
         $credentials = $request->only(['email', 'password']);
@@ -21,9 +25,7 @@ class UserController extends Controller
         return response()->json([
             'message' => 'Login Successfully',
             'success' => true,
-            'data'=> $token
+            'data' => $token
         ], 401);
-
-        return $token;
     }
 }
