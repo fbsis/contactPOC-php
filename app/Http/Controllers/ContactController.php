@@ -11,8 +11,8 @@ class ContactController extends Controller
     public function __construct()
     {
         $this->middleware('auth.role:read', ['only' => ['index', 'show']]);
-        $this->middleware('auth.role:read-add', ['only' => ['index', 'store', 'show']]);
-        $this->middleware('auth.role:read-add-delete', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
+        $this->middleware('auth.role:read-add', ['only' => ['store']]);
+        $this->middleware('auth.role:read-add-delete', ['only' => ['update', 'destroy']]);
     }
 
     private $validatorParams = [
