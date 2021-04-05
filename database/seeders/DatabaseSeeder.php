@@ -64,6 +64,6 @@ class DatabaseSeeder extends Seeder
             "role" => "delete",
         ]);
 
-        \App\Models\Contacts::factory(10)->create();
+        \App\Models\Contacts::factory(100)->create();
     }
 }
