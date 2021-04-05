@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use \App\Models\User;
 use \App\Models\Roles;
+use \App\Models\Configs;
 
 class DatabaseSeeder extends Seeder
 {
@@ -62,6 +63,12 @@ class DatabaseSeeder extends Seeder
         Roles::create([
             "user_id" => $user['id'],
             "role" => "delete",
+        ]);
+
+        Configs::create([
+            "key" => 'onDeletecontacts',
+            "value" => "ondeleteemail@poc.com",
+            "description"=> "EMail to be sent on delete contacts"
         ]);
 
         \App\Models\Contacts::factory(100)->create();
