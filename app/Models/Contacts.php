@@ -22,9 +22,8 @@ class Contacts extends Model
     {
         parent::boot();
 
-        static::deleted(function ($item) {
-            Mail::to("teste@teste.com")
-                ->queue(new DeleteEmail($item));
+        static::deleting(function ($item) {
+            Mail::queue(new DeleteEmail($item));
         });
     }
 }
