@@ -248,7 +248,7 @@ class ContactsTest extends TestCase
     }
 
     /**
-     * Test user with read and add contacts can read contacts
+     * Test user with read and add contacts can add contacts
      *
      * @return void
      */
@@ -311,7 +311,7 @@ class ContactsTest extends TestCase
     }
 
     /**
-     * Test user with read and add contacts cannot edit contacts
+     * Test user with read and add contacts cannot remove contacts
      *
      * @return void
      */
@@ -334,7 +334,7 @@ class ContactsTest extends TestCase
     }
 
     /**
-     * A basic feature test example.
+     * test with can be logget without token
      *
      * @return void
      */
