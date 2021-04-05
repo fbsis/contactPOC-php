@@ -12,7 +12,6 @@ use App\Models\User;
 
 class ContactsTest extends TestCase
 {
-    public $token;
     protected $fakerId;
     protected $fakerName;
     protected $fakerEmail;
@@ -34,9 +33,14 @@ class ContactsTest extends TestCase
         $user = User::where('email', "all@test-poc.com")->first();
         $token = JWTAuth::fromUser($user);
 
-        $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $token,
-        ])->get('/api/contacts');
+        $response = $this
+            ->withHeaders(
+                [
+                    'Authorization' => 'Bearer ' . $token,
+                ]
+            )
+            ->get('/api/contacts');
+
         $response
             ->assertStatus(200)
             ->assertJson([
@@ -54,9 +58,13 @@ class ContactsTest extends TestCase
         $user = User::where('email', "all@test-poc.com")->first();
         $token = JWTAuth::fromUser($user);
 
-        $response = $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $token,
-        ])->get('/api/contact');
+        $response = $this
+            ->withHeaders(
+                [
+                    'Authorization' => 'Bearer ' . $token,
+                ]
+            )
+            ->get('/api/contact');
         $response
             ->assertStatus(404);
     }
@@ -73,9 +81,19 @@ class ContactsTest extends TestCase
 
         $totalContacts = Contacts::count();
 
-        $response = $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $token,
-        ])->post('/api/contacts', ["name" => $this->fakerName, "email" => $this->fakerEmail]);
+        $response = $this
+            ->withHeaders(
+                [
+                    'Authorization' => 'Bearer ' . $token,
+                ]
+            )
+            ->post(
+                '/api/contacts',
+                [
+                    "name" => $this->fakerName,
+                    "email" => $this->fakerEmail
+                ]
+            );
         $response->assertStatus(201);
         $this->assertTrue($totalContacts + 1 == Contacts::count());
 
@@ -100,9 +118,19 @@ class ContactsTest extends TestCase
         $name = $this->fakerName . "editable";
         $email = "editable" . $this->fakerEmail;
 
-        $response = $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $token,
-        ])->put('/api/contacts/' . $lastRecord, ["name" => $name, "email" => $email]);
+        $response = $this
+            ->withHeaders(
+                [
+                    'Authorization' => 'Bearer ' . $token,
+                ]
+            )
+            ->put(
+                '/api/contacts/' . $lastRecord,
+                [
+                    "name" => $name,
+                    "email" => $email
+                ]
+            );
         $response->assertStatus(200);
         $this->assertTrue($response['data']['name'] == $name);
         $this->assertTrue($response['data']['email'] == $email);
@@ -122,9 +150,13 @@ class ContactsTest extends TestCase
         $lastRecord = Contacts::latest("id")->first()['id'];
         $totalContacts = Contacts::count();
 
-        $response = $response = $this->withHeaders([
+        $response = $this
+        ->withHeaders
+        ([
             'Authorization' => 'Bearer ' . $token,
-        ])->delete('/api/contacts/' . $lastRecord);
+        ])
+        ->delete('/api/contacts/' . $lastRecord);
+
         $response->assertStatus(200);
         $this->assertTrue($totalContacts - 1 == Contacts::count());
     }
@@ -141,7 +173,7 @@ class ContactsTest extends TestCase
 
         $totalContacts = Contacts::count();
 
-        $response = $response = $this
+        $response = $this
             ->withHeaders(
                 [
                     'Authorization' => 'Bearer ' . $token,
@@ -174,7 +206,7 @@ class ContactsTest extends TestCase
         $name = $this->fakerName . "editable";
         $email = "editable" . $this->fakerEmail;
 
-        $response = $response = $this
+        $response = $this
             ->withHeaders([
                 'Authorization' => 'Bearer ' . $token,
             ])
@@ -225,7 +257,7 @@ class ContactsTest extends TestCase
         $user = User::where('email', "read.add@test-poc.com")->first();
         $token = JWTAuth::fromUser($user);
 
-        $response = $response = $this
+        $response = $this
             ->withHeaders(
                 [
                     'Authorization' => 'Bearer ' . $token,
@@ -263,7 +295,7 @@ class ContactsTest extends TestCase
         $name = $this->fakerName . "editable";
         $email = "editable" . $this->fakerEmail;
 
-        $response = $response = $this
+        $response = $this
             ->withHeaders([
                 'Authorization' => 'Bearer ' . $token,
             ])
@@ -290,7 +322,7 @@ class ContactsTest extends TestCase
 
         $lastRecord = Contacts::latest("id")->first()['id'];
 
-        $response = $response = $this
+        $response = $this
             ->withHeaders(
                 [
                     'Authorization' => 'Bearer ' . $token,
