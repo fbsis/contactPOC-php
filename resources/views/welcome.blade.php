@@ -4,16 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Contacts POC</title>
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 </head>
 
 <body>
     <div id="app">
-        <header-component></header-component>
-        <!-- <example-component></example-component> -->
-        <login-component></login-component>
-        </div>
+        <App></app>
+    </div>
 </body>
 <script src="{{ asset('js/app.js') }}"></script>
 

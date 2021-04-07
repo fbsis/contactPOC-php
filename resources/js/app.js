@@ -16,7 +16,31 @@ files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+import VueRouter from 'vue-router'
+import App from './views/App'
+import LoginComponent from './views/LoginComponent'
+import DashboardComponent from './views/DashboardComponent'
+
+Vue.use(VueRouter)
+
+const router = new VueRouter({
+    mode: 'history',
+    routes: [
+        {
+            path: '/',
+            name: 'home',
+            component: LoginComponent
+        },
+        {
+            path: '/hello',
+            name: 'hello',
+            component: DashboardComponent,
+        },
+    ],
+});
 
 const app = new Vue({
     el: '#app',
+    components: { App },
+    router,
 });
