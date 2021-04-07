@@ -60,7 +60,7 @@ export default {
         .then(function (response) {
           if (response.data.success === true) {
             localStorage.setItem("token", response.data.data);
-            window.location = "/dashboard";
+            self.$router.push({ name: 'dashboard'})
           }
         })
         .catch(function (error) {

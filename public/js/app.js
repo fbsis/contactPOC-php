@@ -1943,28 +1943,10 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      errorMessage: "",
-      email: "",
-      password: ""
+      contacts: ""
     };
   },
-  methods: {
-    checkForm: function checkForm(e) {
-      var self = this;
-      axios.post("/api/login", {
-        email: this.email,
-        password: this.password
-      }).then(function (response) {
-        if (response.data.success === true) {
-          localStorage.setItem("token", response.data.data);
-          window.location = "/dashboard";
-        }
-      })["catch"](function (error) {
-        self.errorMessage = error.response.data.message;
-      });
-      e.preventDefault();
-    }
-  }
+  methods: {}
 });
 
 /***/ }),
@@ -2038,7 +2020,9 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (response) {
         if (response.data.success === true) {
           localStorage.setItem("token", response.data.data);
-          window.location = "/dashboard";
+          self.$router.push({
+            name: 'dashboard'
+          });
         }
       })["catch"](function (error) {
         self.errorMessage = error.response.data.message;
@@ -2094,8 +2078,8 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__.default({
     name: 'home',
     component: _views_LoginComponent__WEBPACK_IMPORTED_MODULE_1__.default
   }, {
-    path: '/hello',
-    name: 'hello',
+    path: '/dashboard',
+    name: 'dashboard',
     component: _views_DashboardComponent__WEBPACK_IMPORTED_MODULE_2__.default
   }]
 });
