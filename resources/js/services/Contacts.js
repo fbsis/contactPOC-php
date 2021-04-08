@@ -16,8 +16,18 @@ const remove = ($id) => {
         })
 }
 
+const create = (data) => {
+    return axios
+        .post("/api/contacts/", data, {
+            headers: {
+                Authorization: `Basic ${localStorage.getItem("token")}`,
+            },
+        })
+}
+
 
 export default {
     getAll,
+    create,
     remove
 };

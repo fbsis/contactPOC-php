@@ -10,6 +10,7 @@ export default {
   data: function () {
     return {
       contacts: [],
+      created: false,
     };
   },
 
@@ -17,15 +18,20 @@ export default {
     getContacts: function (e) {
       let self = this;
       ContactsService.getAll().then(function (response) {
-        console.log(response);
         self.contacts = response.data.data;
       });
     },
+
     removeContact: function (e) {
       let self = this;
-      ContactsService.remove(e.id).then(function (response) {
+      ContactsService.remove(e.id).then(function () {
         self.getContacts();
       });
+    },
+
+    contactCreated: function (e) {
+      this.created = true;
+      this.getContacts();
     },
   },
 };
@@ -41,6 +47,22 @@ export default {
     >
       Add new Contact
     </button>
+
+    <div
+      class="alert alert-success lert-dismissible fade show"
+      role="alert"
+      v-if="created"
+    >
+      Contact was create with success
+      <button
+        type="button"
+        class="close"
+        data-dismiss="alert"
+        aria-label="Close"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
 
     <table class="table">
       <thead>
@@ -67,7 +89,7 @@ export default {
       </tbody>
     </table>
 
-    <modal-form-component />
+    <modal-form-component @created="contactCreated" />
   </div>
 </template>
 
@@ -76,6 +98,10 @@ input {
   margin-bottom: 10px;
 }
 table.table {
+  margin-top: 10px;
+}
+
+div.alert {
   margin-top: 10px;
 }
 </style>

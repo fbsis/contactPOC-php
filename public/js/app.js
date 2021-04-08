@@ -1920,22 +1920,26 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      contacts: []
+      contacts: [],
+      created: false
     };
   },
   methods: {
     getContacts: function getContacts(e) {
       var self = this;
       _services_Contacts__WEBPACK_IMPORTED_MODULE_1__.default.getAll().then(function (response) {
-        console.log(response);
         self.contacts = response.data.data;
       });
     },
     removeContact: function removeContact(e) {
       var self = this;
-      _services_Contacts__WEBPACK_IMPORTED_MODULE_1__.default.remove(e.id).then(function (response) {
+      _services_Contacts__WEBPACK_IMPORTED_MODULE_1__.default.remove(e.id).then(function () {
         self.getContacts();
       });
+    },
+    contactCreated: function contactCreated(e) {
+      this.created = true;
+      this.getContacts();
     }
   }
 });
@@ -2036,6 +2040,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var _services_Contacts__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../services/Contacts */ "./resources/js/services/Contacts.js");
 //
 //
 //
@@ -2088,16 +2093,47 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   mounted: function mounted() {
     console.log("Component mounted modal.");
   },
   data: function data() {
     return {
-      contacts: ""
+      modalShow: true,
+      contacts: "",
+      name: "",
+      email: ""
     };
   },
-  methods: {}
+  methods: {
+    saveContact: function saveContact(e) {
+      self = this;
+      _services_Contacts__WEBPACK_IMPORTED_MODULE_0__.default.create({
+        name: this.name,
+        email: this.email
+      }).then(function (response) {
+        self.name = "";
+        self.email = "";
+        $('#modalContact').modal('hide');
+        self.$emit('created');
+      });
+      e.preventDefault();
+    }
+  }
 });
 
 /***/ }),
@@ -2244,8 +2280,17 @@ var remove = function remove($id) {
   });
 };
 
+var create = function create(data) {
+  return axios.post("/api/contacts/", data, {
+    headers: {
+      Authorization: "Basic ".concat(localStorage.getItem("token"))
+    }
+  });
+};
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   getAll: getAll,
+  create: create,
   remove: remove
 });
 
@@ -6709,7 +6754,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\ninput[data-v-7f9073a8] {\n  margin-bottom: 10px;\n}\ntable.table[data-v-7f9073a8] {\n  margin-top: 10px;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\ninput[data-v-7f9073a8] {\n  margin-bottom: 10px;\n}\ntable.table[data-v-7f9073a8] {\n  margin-top: 10px;\n}\ndiv.alert[data-v-7f9073a8] {\n  margin-top: 10px;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -38366,8 +38411,19 @@ var render = function() {
         [_vm._v("\n    Add new Contact\n  ")]
       ),
       _vm._v(" "),
+      _vm.created
+        ? _c(
+            "div",
+            {
+              staticClass: "alert alert-success lert-dismissible fade show",
+              attrs: { role: "alert" }
+            },
+            [_vm._v("\n    Contact was create with success\n    "), _vm._m(0)]
+          )
+        : _vm._e(),
+      _vm._v(" "),
       _c("table", { staticClass: "table" }, [
-        _vm._m(0),
+        _vm._m(1),
         _vm._v(" "),
         _c(
           "tbody",
@@ -38400,12 +38456,29 @@ var render = function() {
         )
       ]),
       _vm._v(" "),
-      _c("modal-form-component")
+      _c("modal-form-component", { on: { created: _vm.contactCreated } })
     ],
     1
   )
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "close",
+        attrs: {
+          type: "button",
+          "data-dismiss": "alert",
+          "aria-label": "Close"
+        }
+      },
+      [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+    )
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -38561,114 +38634,142 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", [
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "modalContact",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "modalContactLabel",
+          "aria-hidden": "true"
+        }
+      },
+      [
+        _c("form", { on: { submit: _vm.saveContact } }, [
+          _c(
+            "div",
+            { staticClass: "modal-dialog", attrs: { role: "document" } },
+            [
+              _c("div", { staticClass: "modal-content" }, [
+                _vm._m(0),
+                _vm._v(" "),
+                _c("div", { staticClass: "modal-body" }, [
+                  _c("div", { staticClass: "form-group" }, [
+                    _c(
+                      "label",
+                      { staticClass: "col-form-label", attrs: { for: "name" } },
+                      [_vm._v("Name:")]
+                    ),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.name,
+                          expression: "name"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "text", required: "", autofocus: "" },
+                      domProps: { value: _vm.name },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.name = $event.target.value
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-group" }, [
+                    _c(
+                      "label",
+                      {
+                        staticClass: "col-form-label",
+                        attrs: { for: "email" }
+                      },
+                      [_vm._v("email:")]
+                    ),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.email,
+                          expression: "email"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "email", required: "" },
+                      domProps: { value: _vm.email },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.email = $event.target.value
+                        }
+                      }
+                    })
+                  ])
+                ]),
+                _vm._v(" "),
+                _vm._m(1)
+              ])
+            ]
+          )
+        ])
+      ]
+    )
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", [
+    return _c("div", { staticClass: "modal-header" }, [
+      _c("h5", { staticClass: "modal-title" }, [_vm._v("Modal title")]),
+      _vm._v(" "),
       _c(
-        "div",
+        "button",
         {
-          staticClass: "modal fade",
+          staticClass: "close",
           attrs: {
-            id: "modalContact",
-            tabindex: "-1",
-            role: "dialog",
-            "aria-labelledby": "modalContactLabel",
-            "aria-hidden": "true"
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
           }
         },
-        [
-          _c(
-            "div",
-            { staticClass: "modal-dialog", attrs: { role: "document" } },
-            [
-              _c("div", { staticClass: "modal-content" }, [
-                _c("div", { staticClass: "modal-header" }, [
-                  _c("h5", { staticClass: "modal-title" }, [
-                    _vm._v("Modal title")
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "close",
-                      attrs: {
-                        type: "button",
-                        "data-dismiss": "modal",
-                        "aria-label": "Close"
-                      }
-                    },
-                    [
-                      _c("span", { attrs: { "aria-hidden": "true" } }, [
-                        _vm._v("×")
-                      ])
-                    ]
-                  )
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "modal-body" }, [
-                  _c("form", [
-                    _c("div", { staticClass: "form-group" }, [
-                      _c(
-                        "label",
-                        {
-                          staticClass: "col-form-label",
-                          attrs: { for: "name" }
-                        },
-                        [_vm._v("Name:")]
-                      ),
-                      _vm._v(" "),
-                      _c("input", {
-                        staticClass: "form-control",
-                        attrs: { type: "text", id: "name" }
-                      })
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "form-group" }, [
-                      _c(
-                        "label",
-                        {
-                          staticClass: "col-form-label",
-                          attrs: { for: "email" }
-                        },
-                        [_vm._v("email:")]
-                      ),
-                      _vm._v(" "),
-                      _c("input", {
-                        staticClass: "form-control",
-                        attrs: { id: "email" }
-                      })
-                    ])
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "modal-footer" }, [
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-secondary",
-                      attrs: { type: "button", "data-dismiss": "modal" }
-                    },
-                    [_vm._v("\n            Close\n          ")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-primary",
-                      attrs: { type: "button" }
-                    },
-                    [_vm._v("Save changes")]
-                  )
-                ])
-              ])
-            ]
-          )
-        ]
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-footer" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-secondary",
+          attrs: { type: "button", "data-dismiss": "modal" }
+        },
+        [_vm._v("\n              Close\n            ")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        { staticClass: "btn btn-primary", attrs: { type: "submit" } },
+        [_vm._v("\n              Save changes\n            ")]
       )
     ])
   }
