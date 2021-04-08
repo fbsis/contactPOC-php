@@ -26,7 +26,7 @@ class ContactController extends Controller
      */
     public function index()
     {
-        $contacts = Contacts::all();
+        $contacts = Contacts::orderBy('name', 'asc')->get();
 
         return response(["data" => $contacts], 200);
     }
