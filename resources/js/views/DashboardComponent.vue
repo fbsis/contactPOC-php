@@ -2,21 +2,21 @@
 import ContactsService from "../services/Contacts";
 import PermissionService from "../services/Permission";
 import ModalFormComponent from "./ModalFormComponent.vue";
+import ModalConfigComponent from "./ModalConfigComponent";
 
 export default {
-  components: { ModalFormComponent },
+  components: { ModalFormComponent, ModalConfigComponent },
   mounted() {
     this.canAdd = PermissionService.canAdd();
     this.canDelete = PermissionService.canDelete();
     this.getContacts();
-
   },
   data: function () {
     return {
       contacts: [],
       created: false,
       canAdd: true,
-      canDelete: true
+      canDelete: true,
     };
   },
 
@@ -45,15 +45,24 @@ export default {
 
 <template>
   <div>
-      <button
-        type="button"
-        class="btn btn-outline-primary"
-        data-toggle="modal"
-        data-target="#modalContact"
-        v-if="canAdd"
-      >
-        Add new Contact
-      </button>
+    <button
+      type="button"
+      class="btn btn-outline-primary"
+      data-toggle="modal"
+      data-target="#modalContact"
+      v-if="canAdd"
+    >
+      Add new Contact
+    </button>
+
+    <button
+      type="button"
+      class="btn btn-outline-secondary"
+      data-toggle="modal"
+      data-target="#modalConfig"
+    >
+      Configuration
+    </button>
 
     <div
       class="alert alert-success lert-dismissible fade show"
@@ -97,7 +106,8 @@ export default {
       </tbody>
     </table>
 
-    <modal-form-component @created="contactCreated" />
+    <ModalFormComponent @created="contactCreated" />
+    <ModalConfigComponent />
   </div>
 </template>
 
