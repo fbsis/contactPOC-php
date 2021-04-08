@@ -27,7 +27,7 @@
     <button class="btn btn-lg btn-primary btn-block" type="submit">
       Sign in
     </button>
-    <router-link :to="{ name: 'hello' }">Home</router-link>
+    <router-link :to="{ name: 'dashboard' }">Home</router-link>
   </form>
 </template>
 <style scoped>
