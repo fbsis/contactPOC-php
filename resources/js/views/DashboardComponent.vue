@@ -1,45 +1,86 @@
-<template>
-  <div>dashboard</div>
-</template>
-<style scoped>
-input {
-  margin-bottom: 10px;
-}
-</style>
-
 <script>
+import ModalFormComponent from "./ModalFormComponent.vue";
+import ContactsService from "../services/Contacts";
+
 export default {
+  components: { ModalFormComponent },
   mounted() {
-    console.log("Component mounted login.");
+    this.getContacts();
   },
   data: function () {
     return {
-      errorMessage: "",
-      email: "",
-      password: "",
+      contacts: [],
     };
   },
 
   methods: {
-    checkForm: function (e) {
+    getContacts: function (e) {
+      let self = this;
+      ContactsService.getAll().then(function (response) {
+        console.log(response);
+        self.contacts = response.data.data;
+      });
+    },
+    removeContacts: function (e) {
       let self = this;
       axios
-        .post("/api/login", {
-          email: this.email,
-          password: this.password,
+        .get("/api/contacts/", {
+          headers: {
+            Authorization: `Basic ${localStorage.getItem("token")}`,
+          },
         })
         .then(function (response) {
-          if (response.data.success === true) {
-            localStorage.setItem("token", response.data.data);
-            window.location = "/dashboard";
+          if (response.data) {
+            self.contacts = response.data.data;
           }
         })
         .catch(function (error) {
-          self.errorMessage = error.response.data.message;
+          self.contacts = [];
         });
-
-      e.preventDefault();
     },
   },
 };
 </script>
+
+<template>
+  <div>
+    <button
+      type="button"
+      class="btn btn-outline-primary"
+      data-toggle="modal"
+      data-target="#modalContact"
+    >
+      Add new Contact
+    </button>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">email</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="contact in contacts" :key="contact.id">
+          <th scope="row">{{ contact.name }}</th>
+          <td>{{ contact.email }}</td>
+          <td>
+            <button type="button" class="btn btn-primary">Remove</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <modal-form-component />
+  </div>
+</template>
+
+<style scoped>
+input {
+  margin-bottom: 10px;
+}
+table.table {
+  margin-top: 10px;
+}
+</style>
