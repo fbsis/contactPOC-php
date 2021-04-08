@@ -37,6 +37,8 @@ input {
 </style>
 
 <script>
+import UserService from "../services/User";
+
 export default {
   mounted() {
     console.log("Component mounted login.");
@@ -52,15 +54,11 @@ export default {
   methods: {
     checkForm: function (e) {
       let self = this;
-      axios
-        .post("/api/login", {
-          email: this.email,
-          password: this.password,
-        })
+      UserService.login(this.email, this.password)
         .then(function (response) {
           if (response.data.success === true) {
-            localStorage.setItem("token", response.data.data);
-            self.$router.push({ name: 'dashboard'})
+            UserService.setUserData(response.data);
+            self.$router.push({ name: "dashboard" });
           }
         })
         .catch(function (error) {
