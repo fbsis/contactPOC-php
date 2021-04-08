@@ -29,7 +29,7 @@ class UserController extends Controller
             'message' => 'Login Successfully',
             'success' => true,
             'data' => $token,
-            'user' => User::find($user['id']),
+            'user' => $user,
             'roles' => User::find($user['id'])->roles
         ], 200);
     }
