@@ -1931,18 +1931,10 @@ __webpack_require__.r(__webpack_exports__);
         self.contacts = response.data.data;
       });
     },
-    removeContacts: function removeContacts(e) {
+    removeContact: function removeContact(e) {
       var self = this;
-      axios.get("/api/contacts/", {
-        headers: {
-          Authorization: "Basic ".concat(localStorage.getItem("token"))
-        }
-      }).then(function (response) {
-        if (response.data) {
-          self.contacts = response.data.data;
-        }
-      })["catch"](function (error) {
-        self.contacts = [];
+      _services_Contacts__WEBPACK_IMPORTED_MODULE_1__.default.remove(e.id).then(function (response) {
+        self.getContacts();
       });
     }
   }
@@ -2245,14 +2237,10 @@ var getAll = function getAll(data) {
 };
 
 var remove = function remove($id) {
-  axios["delete"]("/api/contacts/" + $id, {
+  return axios["delete"]("/api/contacts/" + $id, {
     headers: {
       Authorization: "Basic ".concat(localStorage.getItem("token"))
     }
-  }).then(function (response) {
-    return response.data;
-  })["catch"](function (error) {
-    return "error";
   });
 };
 
@@ -38391,7 +38379,21 @@ var render = function() {
               _vm._v(" "),
               _c("td", [_vm._v(_vm._s(contact.email))]),
               _vm._v(" "),
-              _vm._m(1, true)
+              _c("td", [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary",
+                    attrs: { type: "button" },
+                    on: {
+                      click: function($event) {
+                        return _vm.removeContact(contact)
+                      }
+                    }
+                  },
+                  [_vm._v("\n            Remove\n          ")]
+                )
+              ])
             ])
           }),
           0
@@ -38416,18 +38418,6 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", { attrs: { scope: "col" } })
       ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("td", [
-      _c(
-        "button",
-        { staticClass: "btn btn-primary", attrs: { type: "button" } },
-        [_vm._v("Remove")]
-      )
     ])
   }
 ]

@@ -8,18 +8,12 @@ const getAll = (data) => {
 }
 
 const remove = ($id) => {
-    axios
+    return axios
         .delete("/api/contacts/" + $id, {
             headers: {
                 Authorization: `Basic ${localStorage.getItem("token")}`,
             },
         })
-        .then(function (response) {
-            return response.data;
-        })
-        .catch(function (error) {
-            return "error";
-        });
 }
 
 

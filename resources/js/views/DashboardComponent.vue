@@ -21,22 +21,11 @@ export default {
         self.contacts = response.data.data;
       });
     },
-    removeContacts: function (e) {
+    removeContact: function (e) {
       let self = this;
-      axios
-        .get("/api/contacts/", {
-          headers: {
-            Authorization: `Basic ${localStorage.getItem("token")}`,
-          },
-        })
-        .then(function (response) {
-          if (response.data) {
-            self.contacts = response.data.data;
-          }
-        })
-        .catch(function (error) {
-          self.contacts = [];
-        });
+      ContactsService.remove(e.id).then(function (response) {
+        self.getContacts();
+      });
     },
   },
 };
@@ -66,7 +55,13 @@ export default {
           <th scope="row">{{ contact.name }}</th>
           <td>{{ contact.email }}</td>
           <td>
-            <button type="button" class="btn btn-primary">Remove</button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              v-on:click="removeContact(contact)"
+            >
+              Remove
+            </button>
           </td>
         </tr>
       </tbody>
