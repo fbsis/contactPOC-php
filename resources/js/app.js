@@ -23,6 +23,14 @@ import DashboardComponent from './views/DashboardComponent'
 
 Vue.use(VueRouter)
 
+const guard = (to, from, next) => {
+    if (localStorage.getItem('token')) {
+        next();
+    } else {
+        next({ name: "home" });
+    }
+}
+
 const router = new VueRouter({
     mode: 'history',
     routes: [
@@ -35,6 +43,7 @@ const router = new VueRouter({
             path: '/dashboard',
             name: 'dashboard',
             component: DashboardComponent,
+            beforeEnter: guard
         },
     ],
 });
