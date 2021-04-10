@@ -28,6 +28,7 @@ this project is using:
 - Must have a simple permission system to avoid unauthorized or delete any contacts (if user is not a admin)
 - Front-end must be usin VueJS
 
+
 ## Requirement
 - Docker
 
@@ -57,6 +58,10 @@ Everything will be online:
 - mailhog (to test email)
 
 To check the email process go to ``http://localhost:8025/`` and see the e-mail when delete contacts
+
+## Where is the tests?
+here we go: ```sudo ./vendor/bin/sail test```
+for this running sail must be running
 
 ## This is the .env File
 
