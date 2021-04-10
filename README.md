@@ -7,56 +7,111 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## About Laravel
+## Contact List POC
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+This is a proof of concept that is possible to write a good API with Laravel.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+this project is using:
+- PHP 8
+- Laravel With Sail (https://laravel.com/docs/8.x/sail)
+- Vue on Front-end as a single aplication
+- Unit test inside Sail module
+- Mysql Database
+- Redis to handler queues
+- Docker to easy deploy on one click
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## What this POC is proposed to do?
+- Contact list with a CRUD API
+- Every thing of the application must have unit test and feature test
+- When a contact is deleted, have to send e-mail to a defined and editable e-mail (with laravel´s emails component + queues)
+- screen to login and access the contact lists
+- Must have a simple permission system to avoid unauthorized or delete any contacts (if user is not a admin)
+- Front-end must be usin VueJS
 
-## Learning Laravel
+## Requitement
+- Docker
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## How to run this project
+This project is using Sail, so every definition of the project is on docker
+- clone the repository ```git clone https://github.com/fbsis/contactPOC-php.git``` and enter on the folder contactPOC-php
+- copy the .env (file below) on the root directory
+- run command below to install all the dependencies
+```
+sudo docker run --rm \
+    -u "$(id -u):$(id -g)" \
+    -v $(pwd):/opt \
+    -w /opt \
+    laravelsail/php80-composer:latest \
+    composer install --ignore-platform-reqs
+```
+- run command bellow to give permission ```chmod -R 777 bootstrap/cache storage```
+or chmod -R 777 .
+- run ``` docker compose up -d```
+- migration: ```sudo ./vendor/bin/sail artisan migrate:refresh --seed```
+- To stop container: ```sudo ./vendor/bin/sail down```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Everything will be online:
+- Laravel with php 8
+- Mysql
+- Redis
+- mailhog (to test email)
 
-## Laravel Sponsors
+To check the email process go to ``http://localhost:8025/`` and see the e-mail when delete contacts
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+## This is the .env File
 
-### Premium Partners
+```
+APP_NAME=Laravel
+APP_ENV=local
+APP_KEY=base64:7MoSsVghRguEycZpP4cFVVdUffCJEAy8jw+J2SW119Y=
+APP_DEBUG=true
+APP_URL=http://contactPOC-php.test
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/)**
-- **[OP.GG](https://op.gg)**
+LOG_CHANNEL=stack
+LOG_LEVEL=debug
 
-## Contributing
+DB_CONNECTION=mysql
+DB_HOST=mysql
+DB_PORT=3306
+DB_DATABASE=contactpoc_php
+DB_USERNAME=sail
+DB_PASSWORD=password
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+BROADCAST_DRIVER=log
+CACHE_DRIVER=file
+QUEUE_CONNECTION=async
+SESSION_DRIVER=file
+SESSION_LIFETIME=120
 
-## Code of Conduct
+MEMCACHED_HOST=memcached
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+REDIS_HOST=redis
+REDIS_PASSWORD=null
+REDIS_PORT=6379
 
-## Security Vulnerabilities
+MAIL_MAILER=smtp
+MAIL_HOST=mailhog
+MAIL_PORT=1025
+MAIL_USERNAME=null
+MAIL_PASSWORD=null
+MAIL_ENCRYPTION=null
+MAIL_FROM_ADDRESS=poc@teste.com
+MAIL_FROM_NAME="${APP_NAME}"
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+AWS_DEFAULT_REGION=us-east-1
+AWS_BUCKET=
 
-## License
+PUSHER_APP_ID=
+PUSHER_APP_KEY=
+PUSHER_APP_SECRET=
+PUSHER_APP_CLUSTER=mt1
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+MIX_PUSHER_APP_KEY="${PUSHER_APP_KEY}"
+MIX_PUSHER_APP_CLUSTER="${PUSHER_APP_CLUSTER}"
+
+JWT_SECRET=vPEa3RTJD4yUjsN4o0LMpyvqtku5i27zng5ObM3Oapd8sqldrGM9YsON7Fn9WsMv
+
+APP_URL=http://localhost
+```
