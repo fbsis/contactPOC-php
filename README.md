@@ -34,7 +34,7 @@ this project is using:
 
 ## How to run this project
 This project is using Sail, so every definition of the project is on docker
-- clone the repository ```git clone https://github.com/fbsis/contactPOC-php.git``` and enter on the folder contactPOC-php
+- clone the repository ```git clone https://github.com/fbsis/contactPOC-php.git``` and enter on the folder ``contactPOC-php``
 - copy the .env (file below) on the root directory
 - run command below to install all the dependencies
 ```
@@ -45,8 +45,7 @@ sudo docker run --rm \
     laravelsail/php80-composer:latest \
     composer install --ignore-platform-reqs
 ```
-- run command bellow to give permission ```chmod -R 777 bootstrap/cache storage```
-or chmod -R 777 .
+- run command bellow to give permission ```chmod -R 777 .```
 - run ``` docker compose up -d```
 - migrations and seeds: ```sudo ./vendor/bin/sail artisan migrate:refresh --seed```
 - To stop container: ```sudo ./vendor/bin/sail down```
