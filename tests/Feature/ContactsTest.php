@@ -49,27 +49,6 @@ class ContactsTest extends TestCase
     }
 
     /**
-     * Test revert api (has to be 404)
-     *
-     * @return void
-     */
-    public function test_error_404_contacts_with_admin_user()
-    {
-        $user = User::where('email', "all@test-poc.com")->first();
-        $token = JWTAuth::fromUser($user);
-
-        $response = $this
-            ->withHeaders(
-                [
-                    'Authorization' => 'Bearer ' . $token,
-                ]
-            )
-            ->get('/api/contact');
-        $response
-            ->assertStatus(404);
-    }
-
-    /**
      * Test insert contacts
      *
      * @return void

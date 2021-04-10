@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ConfigController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,3 +25,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('login', [UserController::class, 'login']);
 
 Route::resource('contacts', ContactController::class);
+Route::resource('config', ConfigController::class)->middleware('auth.role:read');
