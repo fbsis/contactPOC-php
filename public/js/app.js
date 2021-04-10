@@ -2073,7 +2073,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _services_Contacts__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../services/Contacts */ "./resources/js/services/Contacts.js");
+/* harmony import */ var _services_Configurations__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../services/Configurations */ "./resources/js/services/Configurations.js");
+//
 //
 //
 //
@@ -2135,26 +2136,29 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   mounted: function mounted() {
     console.log("Component mounted modal.");
+    this.getConfigurations();
   },
   data: function data() {
     return {
       modalShow: true,
-      contacts: "",
-      name: "",
-      email: ""
+      configuration: "",
+      onDeletecontacts: ""
     };
   },
   methods: {
+    getConfigurations: function getConfigurations(e) {
+      var self = this;
+      _services_Configurations__WEBPACK_IMPORTED_MODULE_0__.default.get().then(function (response) {
+        var onDeletecontacts = response.data.data.onDeletecontacts;
+        self.onDeletecontacts = onDeletecontacts;
+      });
+    },
     save: function save(e) {
       self = this;
-      _services_Contacts__WEBPACK_IMPORTED_MODULE_0__.default.create({
-        name: this.name,
-        email: this.email
+      _services_Configurations__WEBPACK_IMPORTED_MODULE_0__.default.update({
+        onDeletecontacts: this.onDeletecontacts
       }).then(function (response) {
-        self.name = "";
-        self.email = "";
-        $('#modalContact').modal('hide');
-        self.$emit('created');
+        $("#modalConfig").modal("hide");
       });
       e.preventDefault();
     }
@@ -2384,6 +2388,43 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     forceTLS: true
 // });
+
+/***/ }),
+
+/***/ "./resources/js/services/Configurations.js":
+/*!*************************************************!*\
+  !*** ./resources/js/services/Configurations.js ***!
+  \*************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _User__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./User */ "./resources/js/services/User.js");
+
+
+var get = function get(data) {
+  return axios.get("/api/config/", {
+    headers: {
+      Authorization: "Basic ".concat(_User__WEBPACK_IMPORTED_MODULE_0__.default.getToken())
+    }
+  });
+};
+
+var update = function update(data) {
+  return axios.post("/api/config/", data, {
+    headers: {
+      Authorization: "Basic ".concat(_User__WEBPACK_IMPORTED_MODULE_0__.default.getToken())
+    }
+  });
+};
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  get: get,
+  update: update
+});
 
 /***/ }),
 
@@ -39065,7 +39106,10 @@ var render = function() {
                   _c("div", { staticClass: "form-group" }, [
                     _c(
                       "label",
-                      { staticClass: "col-form-label", attrs: { for: "name" } },
+                      {
+                        staticClass: "col-form-label",
+                        attrs: { for: "onDeletecontacts" }
+                      },
                       [_vm._v("E-mail to be sent on delete:")]
                     ),
                     _vm._v(" "),
@@ -39074,19 +39118,19 @@ var render = function() {
                         {
                           name: "model",
                           rawName: "v-model",
-                          value: _vm.name,
-                          expression: "name"
+                          value: _vm.onDeletecontacts,
+                          expression: "onDeletecontacts"
                         }
                       ],
                       staticClass: "form-control",
                       attrs: { type: "text", required: "", autofocus: "" },
-                      domProps: { value: _vm.name },
+                      domProps: { value: _vm.onDeletecontacts },
                       on: {
                         input: function($event) {
                           if ($event.target.composing) {
                             return
                           }
-                          _vm.name = $event.target.value
+                          _vm.onDeletecontacts = $event.target.value
                         }
                       }
                     })

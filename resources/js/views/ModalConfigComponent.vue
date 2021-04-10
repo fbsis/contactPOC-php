@@ -24,16 +24,17 @@
             </div>
             <div class="modal-body">
               <div class="form-group">
-                <label for="name" class="col-form-label">E-mail to be sent on delete:</label>
+                <label for="onDeletecontacts" class="col-form-label"
+                  >E-mail to be sent on delete:</label
+                >
                 <input
                   type="text"
                   class="form-control"
                   required
                   autofocus
-                  v-model="name"
+                  v-model="onDeletecontacts"
                 />
               </div>
-              
             </div>
             <div class="modal-footer">
               <button
@@ -56,33 +57,35 @@
 
 
 <script>
-import ContactsService from "../services/Contacts";
+import ConfigurationsService from "../services/Configurations";
 
 export default {
   mounted() {
     console.log("Component mounted modal.");
+    this.getConfigurations()
   },
   data: function () {
     return {
       modalShow: true,
-      contacts: "",
-      name: "",
-      email: "",
+      configuration: "",
+      onDeletecontacts: "",
     };
   },
 
   methods: {
+    getConfigurations: function (e) {
+      let self = this;
+      ConfigurationsService.get().then(function (response) {
+        const { onDeletecontacts } = response.data.data;
+        self.onDeletecontacts = onDeletecontacts;
+      });
+    },
     save: function (e) {
       self = this;
-      ContactsService.create({
-        name: this.name,
-        email: this.email,
+      ConfigurationsService.update({
+        onDeletecontacts: this.onDeletecontacts,
       }).then(function (response) {
-        self.name = "";
-        self.email = "";
-        $('#modalContact').modal('hide');
-        self.$emit('created');
-
+        $("#modalConfig").modal("hide");
       });
       e.preventDefault();
     },
