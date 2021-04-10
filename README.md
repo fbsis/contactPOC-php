@@ -48,16 +48,14 @@ sudo docker run --rm \
 - run command bellow to give permission ```chmod -R 777 bootstrap/cache storage```
 or chmod -R 777 .
 - run ``` docker compose up -d```
-- migration: ```sudo ./vendor/bin/sail artisan migrate:refresh --seed```
+- migrations and seeds: ```sudo ./vendor/bin/sail artisan migrate:refresh --seed```
 - To stop container: ```sudo ./vendor/bin/sail down```
 
 Everything will be online:
 - Laravel with php 8
 - Mysql
 - Redis
-- mailhog (to test email)
-
-To check the email process go to ``http://localhost:8025/`` and see the e-mail when delete contacts
+- mailhog (to test email) - on ``http://localhost:8025/``
 
 ## Where is the tests?
 here we go: ```sudo ./vendor/bin/sail test```
@@ -120,3 +118,8 @@ JWT_SECRET=vPEa3RTJD4yUjsN4o0LMpyvqtku5i27zng5ObM3Oapd8sqldrGM9YsON7Fn9WsMv
 
 APP_URL=http://localhost
 ```
+
+## What more is missing?
+- Implements swagger to make the API more documented
+- Make a CD/CI on github
+- Front-end responsible and mobile first
