@@ -28,7 +28,7 @@ this project is using:
 - Must have a simple permission system to avoid unauthorized or delete any contacts (if user is not a admin)
 - Front-end must be usin VueJS
 
-## Requitement
+## Requirement
 - Docker
 
 ## How to run this project
